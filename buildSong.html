@@ -9,26 +9,36 @@ and open the template in the editor.
         <title>Song Builder</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <!--Don't change the order of theses scripts! It's super important!-->
+        <script src="js/jquery-3.2.1.js"></script>
+        <script src="js/chord.js"></script>
+        <script src="js/noteFinderController.js"></script>
     </head>
     <body>
         <h1>Song Builder</h1>
         <p>Choose a chord, duration, and lyrics. Click "add bar" to add another 
             bar.</p>
         <div id="barBox0" class="barBox">
+            <label for="rootSelect">Select Root:</label>
             <select id='rootSelect' onchange="onRootChange">
-            <option value="A">A</option>
-            <option value="A#/Bb">A#/Bb</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-            <option value="C#/Db">C#/Db</option>
-            <option value="D">D</option>
-            <option value="D#/Eb">D#/Eb</option>
-            <option value="E">E</option>
-            <option value="F">F</option>
-            <option value="F#/Gb">F#/Gb</option>
-            <option value="G">G</option>
-            <option value="G#/Ab">G#/Ab</option>
-        </select>
+                <option value="A">A</option>
+                <option value="A#/Bb">A#/Bb</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="C#/Db">C#/Db</option>
+                <option value="D">D</option>
+                <option value="D#/Eb">D#/Eb</option>
+                <option value="E">E</option>
+                <option value="F">F</option>
+                <option value="F#/Gb">F#/Gb</option>
+                <option value="G">G</option>
+                <option value="G#/Ab">G#/Ab</option>
+            </select>
+            <label for="chordSelect">Select Chord Type:</label>
+            <select id='chordSelect' onchange="onChordChange">
+                <!--Controller fills options.-->
+            </select>
         </div>
     </body>
 </html>
