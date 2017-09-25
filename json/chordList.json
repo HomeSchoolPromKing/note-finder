@@ -1,0 +1,6 @@
+{"chords":[ 
+    {"type" : "Major", "abbreviation" : "maj", "notes" : [0,4,7]},
+    {"type" : "Minor", "abbreviation" : "min", "notes" : [0,3,7]},
+    {"type" : "Augmented", "abbreviation" : "aug", "notes" : [0,4,8]},
+    {"type" : "Diminished", "abbreviation" : "dim", "notes" : [0,3,6]}]
+}

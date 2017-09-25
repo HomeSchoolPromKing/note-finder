@@ -1,0 +1,12 @@
+DB Notes
+
+Fields:
+	Title (srting)
+	Artist (string)
+        Time signature (string?)
+        Bar Count (int)
+	Chord Array (serialized string?)
+	Lyrics Array (serialized string?)
+	Private (bool)
+        Password (hashed?)
+        
