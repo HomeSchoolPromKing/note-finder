@@ -11,15 +11,32 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         <!--Don't change the order of theses scripts! It's super important!-->
-        <script src="js/jquery-3.2.1.js"></script>
+        <script src="js/jquery-3.2.1.js"></scr>
+        </form>ipt>
         <script src="js/chord.js"></script>
         <script src="js/noteFinderController.js"></script>
     </head>
     <body>
         <h1>Song Builder</h1>
-        <p>Choose a chord, duration, and lyrics. Click "add bar" to add another 
-            bar.</p>
-        <div id="barBox0" class="barBox">
+        <div id="explainBox">
+            <h2>How This Works</h2>
+            <p>Songs on this site (working title) are built in "blocks." Each block
+                has a chord (or note), a length (duration), and optional lyrics.</p>
+            <p>More functionality coming</p>
+        </div>
+        <div id="titleBox" class="titleFormCont">
+            <form id="songInfo" class="titleForm">
+                <label for="songTitle">Title: </label> 
+                <input type="text" id="songTitle">
+                <label for="songArtist">Artist: </label> 
+                <input type="text" id="songArtist">
+                <label for="songAlbum">Album: </label> 
+                <input type="text" id="songAlbum">
+            </form>
+        </div>
+        <p>Choose a chord, duration, and lyrics. Click "add block" to add another 
+            block.</p>
+        <div id="songBlock0" class="songBlock">
             <label for="rootSelect">Select Root:</label>
             <select id='rootSelect' onchange="onRootChange">
                 <option value="A">A</option>
@@ -39,6 +56,9 @@ and open the template in the editor.
             <select id='chordSelect' onchange="onChordChange">
                 <!--Controller fills options.-->
             </select>
+            <br>
+            <label for="lyricBox">Lyrics: </label>
+            <input type="text" id="lyricBox" class="lyricBox">
         </div>
     </body>
 </html>
