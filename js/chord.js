@@ -16,6 +16,7 @@ var noteArray = ["A", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb
 //Initialize chord list, filled with chordList.json later
 //Syke, the whole thing is in here now. Fuck getJSON().
 var chordList = [ 
+    {"type" : null, "abbreviation" : null, notes : [0]),
     {"type" : "Major", "abbreviation" : "maj", "notes" : [0,4,7]},
     {"type" : "Minor", "abbreviation" : "min", "notes" : [0,3,7]},
     {"type" : "Augmented", "abbreviation" : "aug", "notes" : [0,4,8]},
@@ -23,6 +24,8 @@ var chordList = [
     {"type" : "Dominant 7th", "abbreviation" : "7", "notes" : [0,4,7,10]},
     {"type" : "Major 7th", "abbreviation" : "maj7", "notes" : [0,4,7,11]}
 ]; 
+
+//I was thinking about this all wrong. I'm gonna delete this nonsense down here.
 
 //Load chord list from chordList.json -- Doesn't work
 //$(document).ready(function (){
@@ -52,8 +55,44 @@ function Chord(root, type) {
     this.root = root;
     this.type = type;
     this.noteNums = [];
+    this.noteNames = [];
     
-    //Method for returning notes in chord. Returns as array of strings
+    
+    //Setters and getters
+    this.setRoot = function(newRoot) {
+        this.root = newRoot;
+    };
+    
+    this.getRoot = function() {
+        return this.root;
+    };
+    
+    this.setType = function(newType) {
+        this.type = newType;
+    };
+    
+    this.getType = function() {
+        return this.type;
+    };
+    
+    this.setNoteNums = function (newNoteNums) {
+        this.noteNums = newNoteNums;
+    };
+    
+    this.getNoteNums = function() {
+        return this.noteNums;
+    };
+    
+    this.setNoteNames = function(newNoteNames) {
+        this.noteNames = newNoteNames;
+    };
+    
+    this.getNoteNames = function () {
+        return this.noteNames;
+    };
+    
+    //Gonna break this into smaller parts. Just you wait.
+    //Method for returning notes in chord. Returns as array of strings    
     this.getNotes = function() {
         this.noteNums = [];
         for (i = 0; i < chordList.length; i++) {
