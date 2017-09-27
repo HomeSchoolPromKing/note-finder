@@ -54,7 +54,7 @@ function Chord(root, type) {
     this.noteNums = [];
     
     //Method for returning notes in chord. Returns as array of strings
-    this.getNotes = function(root, type) {
+    this.getNotes = function() {
         this.noteNums = [];
         for (i = 0; i < chordList.length; i++) {
             //console.log(type);

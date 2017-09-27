@@ -1,7 +1,7 @@
 DB Notes
 
 Fields:
-	Title (srting)
+	Title (string)
 	Artist (string)
         Time signature (string?)
         Bar Count (int)

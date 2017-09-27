@@ -1,5 +1,5 @@
 /* 
-Note Finder Controller Script
+Note Finder View Script
 Zack Elliott
 09/24/2017
  */
@@ -27,7 +27,7 @@ function onRootChange() {
     console.log(currentChord);
     $(output).text("Chord: " + currentChord.root + " " + currentChord.type +
             ". Notes in chord: "  + 
-            currentChord.getNotes(currentChord.root, currentChord.type));
+            currentChord.getNotes());
 }
 
 function onChordChange() {
@@ -35,5 +35,5 @@ function onChordChange() {
     console.log(currentChord);
     $(output).text("Chord: " + currentChord.root + " " + currentChord.type +
             ". Notes in chord: "  + 
-            currentChord.getNotes(currentChord.root, currentChord.type));
+            currentChord.getNotes());
 }

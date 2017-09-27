@@ -11,10 +11,9 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         <!--Don't change the order of theses scripts! It's super important!-->
-        <script src="js/jquery-3.2.1.js"></scr>
-        </form>ipt>
+        <script src="js/jquery-3.2.1.js"></script>
         <script src="js/chord.js"></script>
-        <script src="js/noteFinderController.js"></script>
+        <script src="js/songBuilderView.js"></script>
     </head>
     <body>
         <h1>Song Builder</h1>
@@ -36,7 +35,7 @@ and open the template in the editor.
         </div>
         <p>Choose a chord, duration, and lyrics. Click "add block" to add another 
             block.</p>
-        <div id="songBlock0" class="songBlock">
+        <div id="songBlock0" class="songBlock" style="border: solid;">
             <label for="rootSelect">Select Root:</label>
             <select id='rootSelect' onchange="onRootChange">
                 <option value="A">A</option>
@@ -59,6 +58,7 @@ and open the template in the editor.
             <br>
             <label for="lyricBox">Lyrics: </label>
             <input type="text" id="lyricBox" class="lyricBox">
+            <input type="button" id="btnAddBlock" value="Add Block">
         </div>
     </body>
 </html>
