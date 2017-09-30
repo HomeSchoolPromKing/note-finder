@@ -36,8 +36,8 @@ function Song() {
     this.blockArray = [];
     //this.chordsUsed = [];
    
-    this.addBlock = function(block = new Block("A")) {
-        var newBlock = block;
+    this.addBlock = function(chord) {
+        var newBlock = new Block(chord);
         this.blockArray.push(newBlock);
         //if (!checkChords(this.chordsUsed, newBlock.chord)) {
         //    this.chordsUsed.push(newBlock.chord);
