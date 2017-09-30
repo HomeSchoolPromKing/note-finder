@@ -4,16 +4,44 @@
  * 9/29/2017
  */
 
+/*
+ * Holy shit this script is a bitch.
+ * 
+ * The idea here is that the user is building a Song (capital "S" so you know 
+ * it's an object). Songs are made of Blocks, which are represented in the DOM 
+ * as, well, blocks. Blocks have a Chord (in the context of this 
+ * applicaiton/site, chords can be one note), a duration, and optional lyrics. 
+ * 
+ * Chords are chords. If you want to know what a chord is musically, take a 
+ * music theory class. If you want to know how a Chord is defined logically, 
+ * check out chord.js in the js folder.
+ * 
+ * The Song is continuously built as a javascript object. It's gonna get passed
+ * to a PHP script or somethiing, I dunno.
+ * 
+ * The lyrics are the one thing that is NOT updated continuously. That's gotta
+ * be parsed on save or something. I'll figure it out later.
+ */
+
+
 /* global chordList */
 
-//Define helper variables
+//Define song object
 var currentSong = new Song();
 
 //Define output update function for all song block divs
 //Needs block index and updated chord to work. Don't fuck this up
-var updateOutput = function(blockIndex, chord) {
+var updateChordOutput = function(blockIndex, chord) {
     $('#chordDisplay' + blockIndex).text(chord.root + " " + chord.type);
     $('#notesDisplay' + blockIndex).text("Notes in chord: " + chord.noteNames);
+};
+
+//TODO: Define lyrics input/output binding for all song block divs
+//This makes the lyrics input output to some other shit
+var onLyricsChange = function () {
+    var currentBlockIndex = $(this.parentNode).index();
+    $('#lyricsDisplay' + currentBlockIndex).text($(this).val());
+    console.log("Sumpin got typed in me");
 };
 
 //Define listener for root select
@@ -25,7 +53,7 @@ var onRootChange = function () {
     currentChord = new Chord(newRoot, currentChord.type);
     currentSong.blockArray[currentBlockIndex].chord = currentChord;
     console.log("Current chord for block " + currentBlockIndex + ": " + currentChord.root + " " + currentChord.type);
-    updateOutput(currentBlockIndex, currentChord);
+    updateChordOutput(currentBlockIndex, currentChord);
 };
 
 //Define listener for chord select
@@ -37,7 +65,7 @@ var onChordChange = function() {
     currentChord = new Chord(currentChord.root, newType);
     currentSong.blockArray[currentBlockIndex].chord = currentChord;
     console.log("Current chord for block " + currentBlockIndex + ": " + currentChord.root + " " + currentChord.type);
-    updateOutput(currentBlockIndex, currentChord);
+    updateChordOutput(currentBlockIndex, currentChord);
 };
 
 //Define listener for beats select
@@ -74,6 +102,7 @@ var addBlockDiv = function() {
         '<div id="songBlock'+ index +'" class="songBlock4" style="border-style: solid;">\
             <h3 id="chordDisplay' + index +'"></h3>\
             <h4 id="notesDisplay' + index +'"></h4>\
+            <h4 id="lyricsDisplay' + index +'"></h4>\
             <label for="rootSelect' + index +'">Select Root:</label>\
             <select id="rootSelect' + index +'" class="rootSelect" onchange="onRootChange">\
                 <option value="A">A</option>\
@@ -94,14 +123,14 @@ var addBlockDiv = function() {
                 <!--Controller fills options.-->\
             </select>\
             <br>\
-            <label for="lyricBox' + index +'">Lyrics: </label>\
-            <input type="text" id="lyricBox' + index +'" class="lyricBox">\
+            <label for="lyricsBox' + index +'">Lyrics: </label>\
+            <input type="text" id="lyricsBox' + index +'" class="lyricBox">\
             <label for="beatsSelect' + index +'">Beats: </label> \
             <select id="beatsSelect' + index +'" onchange="onBeatsChange">\
                 <option value="1">1</option>\
                 <option value="2">2</option>\
                 <option value="3">3</option>\
-                <option value="4">4</option>\
+                <option value="4" selected="selected">4</option>\
             </select>\
             <input type="button" id="btnAddBlock' + index +'" class="btnAddBlock" onclick="addBlockDiv" value="Add New Block">\n\
         </div>');
@@ -121,6 +150,7 @@ var addBlockDiv = function() {
     //console.log('#btnAddBlock' + index);
     $('#beatsSelect' + index).change(onBeatsChange);
     $('#btnAddBlock' + index).click(addBlockDiv);
+    $('#lyricsBox' + index).on('input', onLyricsChange);
     
     //Hide last add block button
     $('#btnAddBlock' + (index -1)).hide();
@@ -130,7 +160,7 @@ var addBlockDiv = function() {
     //console.log("Song length in blocks: " + currentSong.blockArray.length);
     
     //Intialize output with update cuz we fancy
-    updateOutput(index, currentSong.blockArray[index].chord);
+    updateChordOutput(index, currentSong.blockArray[index].chord);
 };
 
 //Create first block on ready
