@@ -49,7 +49,7 @@ function cap12(noteNum) {
 };
 
 //Chord constructor
-function Chord(root, type = "") {
+function Chord(root = "A", type = "") {
     this.root = root;
     this.type = type;
     

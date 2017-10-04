@@ -9,15 +9,17 @@
  * 
  * The idea here is that the user is building a Song (capital "S" so you know 
  * it's an object). Songs are made of Blocks, which are represented in the DOM 
- * as, well, blocks. Blocks have a Chord (in the context of this 
+ * as divs of class (think html and css class, not js) songBlock(n), where n is 
+ * the number of beats for that block. Blocks have a Chord (in the context of this 
  * applicaiton/site, chords can be one note), a duration, and optional lyrics. 
  * 
- * Chords are chords. If you want to know what a chord is musically, take a 
- * music theory class. If you want to know how a Chord is defined logically, 
- * check out chord.js in the js folder.
+ * Chords are really just a group of notes, but they also have a toor and type 
+ * that determines their name. If you want to know what a chord is musically, 
+ * take a music theory class. If you want to know how a Chord is defined 
+ * logically, check out chord.js in the js folder.
  * 
  * The Song is continuously built as a javascript object. It's gonna get passed
- * to a PHP script or somethiing, I dunno.
+ * to a PHP script or something, I dunno.
  * 
  * The lyrics are the one thing that is NOT updated continuously. That's gotta
  * be parsed on save or something. I'll figure it out later.
@@ -29,19 +31,37 @@
 //Define song object
 var currentSong = new Song();
 
+//Helper method
 //Define output update function for all song block divs
-//Needs block index and updated chord to work. Don't fuck this up
+//Needs block index and updated chord to work. 
 var updateChordOutput = function(blockIndex, chord) {
     $('#chordDisplay' + blockIndex).text(chord.root + " " + chord.type);
     $('#notesDisplay' + blockIndex).text("Notes in chord: " + chord.noteNames);
 };
 
-//TODO: Define lyrics input/output binding for all song block divs
+//Helper method
+//Define chords used update. Updates the currentSong's chords used on every 
+//chord type or root update.
+//
+//Searches block array for chords and populates chordsUsed array
+//
+//Kinda verbose, bear with me
+var updateChordsUsedView = function() {
+    currentSong.updateChordsUsed();
+    $('#chordsUsedDisplay').text("Chords used: ");
+    console.log("Chords used list:" + currentSong.chordsUsed.entries());
+    for (i = 0; i < currentSong.chordsUsed.length; i++) {
+       $('#chordsUsedDisplay').append(currentSong.chordsUsed[i].root.toString() + " " + currentSong.chordsUsed[i].type.toString() + ", ");
+    }
+};
+
+
+//Define lyrics input/output binding for all song block divs
 //This makes the lyrics input output to some other shit
 var onLyricsChange = function () {
     var currentBlockIndex = $(this.parentNode).index();
     $('#lyricsDisplay' + currentBlockIndex).text($(this).val());
-    console.log("Sumpin got typed in me");
+    //console.log("Sumpin got typed in me");
 };
 
 //Define listener for root select
@@ -54,6 +74,7 @@ var onRootChange = function () {
     currentSong.blockArray[currentBlockIndex].chord = currentChord;
     console.log("Current chord for block " + currentBlockIndex + ": " + currentChord.root + " " + currentChord.type);
     updateChordOutput(currentBlockIndex, currentChord);
+    updateChordsUsedView();
 };
 
 //Define listener for chord select
@@ -66,38 +87,37 @@ var onChordChange = function() {
     currentSong.blockArray[currentBlockIndex].chord = currentChord;
     console.log("Current chord for block " + currentBlockIndex + ": " + currentChord.root + " " + currentChord.type);
     updateChordOutput(currentBlockIndex, currentChord);
+    updateChordsUsedView();
 };
 
 //Define listener for beats select
 //Changes duration of block and class of div
 var onBeatsChange = function () {
     var newBeatNum = $(this).find(":selected").val();
+    var currentBlockIndex = $(this.parentNode).index();
     
     //Change class number so we can do css later
-    /*
-     *DON'T FUCK WITH THE SONGBLOCK CLASS 
-     *YOU WANNA MAKE IT LOOK DIFFERENT, PUT EVERY SONG BLOCK IN A DIV
-     *GIVE THAT SHIT WHATEVER CLASS YOU WANT
-     *EXCEPT DON"T DO THAT BECAUSE THE STRUCTURE OF THE HTML IS DEFINED HERE
-     *
-     *JUST DON'T FUCK WITH IT
-     *
-     *YOU CAN FORK IT OR WHATEVER, THOUGH
-     *
-     *I WILL CUT YOU, THOUGH
-     */
-   
-    //Sorry for the profanity. Just know that this method removes all classes from the blockDiv before assigning a new one.
-    $(this.parentNode).removeClass();
+    //This removes all classes that start with "songBlock" and then have 
+    //one or more non whitespace characters after that. It SHOULDN'T delete a class named just 
+    //"songBlock". I think.
+    $(this.parentNode).removeClass(function(index, className) {
+        return (className.match(/\bsongBlock\S+/g) || []).join(' ');
+    });
+    
+    //Add new songBlock class
     $(this.parentNode).addClass("songBlock" + newBeatNum);
     console.log($(this.parentNode).attr('class'));
+    
+    //TODO: Update current chord
+    currentSong.blockArray[currentBlockIndex].duration = newBeatNum;
+    //console.log("Duration of that block is now: " + currentSong.blockArray[currentBlockIndex].duration);
 };
 
 //Define listener for add block buttons
 //Currently hard coded for beat options as 1-4. I'll worry about it later.
 var addBlockDiv = function() {
     var index = currentSong.blockArray.length;
-    alert("adding a block, boss");
+    console.log("adding a block, boss");
     $("#songBlocksContainer").append(
         '<div id="songBlock'+ index +'" class="songBlock4" style="border-style: solid;">\
             <h3 id="chordDisplay' + index +'"></h3>\
@@ -120,7 +140,7 @@ var addBlockDiv = function() {
             </select>\
             <label for="chordSelect' + index +'">Select Chord Type:</label>\
             <select id="chordSelect' + index +'" class="chordSelect" onchange="onChordChange">\
-                <!--Controller fills options.-->\
+                <!--View fills options.-->\
             </select>\
             <br>\
             <label for="lyricsBox' + index +'">Lyrics: </label>\
@@ -161,10 +181,14 @@ var addBlockDiv = function() {
     
     //Intialize output with update cuz we fancy
     updateChordOutput(index, currentSong.blockArray[index].chord);
+    updateChordsUsedView();
 };
 
 //Create first block on ready
 $(document).ready(function (){    
     //Creat first block
     addBlockDiv();
+    
+    //TODO: add listeners for song (non-songBlock-specific) options
+    
 });

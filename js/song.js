@@ -7,48 +7,40 @@
  */
 
 //Helper method
-//Checks chords against used array and adds them if they aren't there already
-function checkChords(usedArray, newChord) {
-    var wasUsed = false;
-    for (i = 0; i < usedArray.length; i++) {
-        if (usedArray[i] === newChord) {
-            wasUsed = true;
-        };
-    };
-    return wasUsed;
-};
-
-//Helper method
 //Searches block array for matching chords. Use when deleting chords to 
 //determine if the chord needs to be removed from the chords used list.
-function checkBlocks(blocks, checkChord) {
-    var stillInABlock = false;
-    for (i = 0; i < blocks.length; i++) {
-        if (blocks[i].chord === checkChord) {
-            stillInABlock = true;
-        }
-    };
-    return stillInABlock;
-};
+function contains(array, Chord) {
+    var i = array.length;
+    while (i--) {
+       if (array[i].root === Chord.root && array[i].type === Chord.type) {
+           return true;
+       }
+    }
+    return false;
+}
 
 //Constructor
 function Song() {
     this.blockArray = [];
-    //this.chordsUsed = [];
+    this.chordsUsed = [new Chord()];
+    console.log("chords used on initialization: " + this.chordsUsed[0].root + " " + this.chordsUsed[0].type);
    
     this.addBlock = function(chord) {
-        var newBlock = new Block(chord);
-        this.blockArray.push(newBlock);
-        //if (!checkChords(this.chordsUsed, newBlock.chord)) {
-        //    this.chordsUsed.push(newBlock.chord);
-       // }
+       var newBlock = new Block(chord);
+       this.blockArray.push(newBlock);
    };
    
    this.deleteBlock = function(blockIndex) {
-       blockArray.splice(blockIndex, 1);
-       //if (!checkBlocks(this.blockArray, this.blockArray[blockIndex].chord)) {
-       //    this.chordsUsed = this.chordsUsed.filter(chord => chord !== this.blockArray[blockIndex].chord);
-       //}
+       this.blockArray.splice(blockIndex, 1);
    };
    
+   this.updateChordsUsed = function (blockIndex) {
+       this.chordsUsed = [];
+       for (j = 0; j < this.blockArray.length; j++) {
+           var chordToCheck = this.blockArray[j].chord;
+           if (!contains(this.chordsUsed, chordToCheck)) {  
+                this.chordsUsed.push(new Chord(chordToCheck.root, chordToCheck.type));
+           };
+       };
+   };
 };
