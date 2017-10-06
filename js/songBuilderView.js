@@ -63,7 +63,6 @@ var updateChordsUsedView = function() {
     }
 };
 
-
 //Define lyrics input/output binding for all song block divs
 //This makes the lyrics input output to some other shit
 var onLyricsChange = function () {
@@ -147,13 +146,23 @@ var deleteBlockDiv = function () {
         $('#btnAddBlock' + i).prop("id", ("btnAddBlock" + (i - 1)));
         $('#btnDeleteBlock' + i).prop("id", ("btnDeleteBlock" + (i - 1)));
     }
-    
     updateChordsUsedView();
+    
+    //Check to see if song only has one block. If so, hide delete
+    if (currentSong.blockArray.length === 1) {
+        $('#btnDeleteBlock0').hide();
+    }
 };
 
 //Define listener for add block buttons
 //Currently hard coded for beat options as 1-4. I'll worry about it later.
 var addBlockDiv = function() {
+    
+    //show initial delete button if hidden
+    if ($('#btnDeleteBlock0').is(':hidden')) {
+        $('#btnDeleteBlock0').show();
+    }
+    
     console.log("adding a block, boss");
     
     //index of button CLICKED
@@ -236,6 +245,7 @@ var addBlockDiv = function() {
     //Initialize chord output
     updateChordOutput((index + 1), currentSong.blockArray[index + 1].chord);
     updateChordsUsedView();
+    currentSong.blockArray[index + 1].duration = "4";
 };
 
 //Create first block on ready
@@ -297,9 +307,13 @@ $(document).ready(function (){
 
     //Add block to song object
     currentSong.insertBlock(0);
+    currentSong.blockArray[0].duration = "4";
 
     //Initialize chord output
     updateChordOutput(0, currentSong.blockArray[0].chord);
+    
+    //Hide initial block's delete button
+    $('#btnDeleteBlock0').hide();
     
     //Initialize chords used
     updateChordsUsedView();
