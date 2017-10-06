@@ -127,25 +127,26 @@ var addBlockDiv = function() {
     console.log("adding a block, boss");
     
     //index of button CLICKED
-    //Defaults to 0 if not called by a button
     var index = $(this.parentNode).index();
     console.log(index);
     console.log("new index: " + (index + 1));
+    
+    //Insert block in song object
+    currentSong.insertBlock(index + 1);
         
     //Iterates through exisitng divs after this one and changes indices
-    for (i = (index + 1); i < (currentSong.blockArray.length + 1); i++) {
-        $('#songBlock' + (i + 1)).id = ("songBlock" + (i + 2));
-        $('#chordDisplay' + (i + 1)).id = ("chordDisplay" + (i + 2));
-        $('#notesDisplay' + (i + 1)).id = ("notesDisplay" + (i + 2));
-        $('#lyricsDisplay' + (i + 1)).id = ("lyricsDisplay" + (i + 2));
-        $('#rootSelect' + (i + 1)).id = ("rootSelect" + (i + 2));
-        $('#chordSelect' + (i + 1)).id = ("chordSelect" + (i + 2));
-        $('#lyricsBox' + (i + 1)).id = ("lyricsBox" + (i + 2));
-        $('#beatsSelect' + (i + 1)).id = ("beatsSelect" + (i + 2));
-        $('#btnAddBlock' + (i + 1)).id = ("btnAddBlcok" + (i + 2));
+    for (i = (currentSong.blockArray.length); i > (index); i--) {
+        $('#songBlock' + i).prop("id", ("songBlock" + (i + 1)));
+        $('#chordDisplay' + i).prop("id", ("chordDisplay" + (i + 1)));
+        $('#notesDisplay' + i).prop("id", ("notesDisplay" + (i + 1)));
+        $('#lyricsDisplay' + i).prop("id", ("lyricsDisplay" + (i + 1)));
+        $('#rootSelect' + i).prop("id", ("rootSelect" + (i + 1)));
+        $('#chordSelect' + i).prop("id", ("chordSelect" + (i + 1)));
+        $('#lyricsBox' + i).prop("id", ("lyricsBox" + (i + 1)));
+        $('#beatsSelect' + i).prop("id", ("beatsSelect" + (i + 1)));
+        $('#btnAddBlock' + i).prop("id", ("btnAddBlock" + (i + 1)));
     }
     
-    console.log("y tho");
     $("#songBlock" + index).after(
         '<div id="songBlock'+ (index + 1) +'" class="songBlock4" style="border-style: solid;">\
             <h3 id="chordDisplay' + (index + 1) +'"></h3>\
@@ -198,9 +199,6 @@ var addBlockDiv = function() {
     $('#beatsSelect' + (index +1)).change(onBeatsChange);
     $('#btnAddBlock' + (index +1)).click(addBlockDiv);
     $('#lyricsBox' + (index +1)).on('input', onLyricsChange);
-
-    //Insert block in song object
-    currentSong.insertBlock(index + 1);
 
     //Initialize chord output
     updateChordOutput((index + 1), currentSong.blockArray[index + 1].chord);
