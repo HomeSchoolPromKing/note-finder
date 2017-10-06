@@ -24,16 +24,25 @@ function Song() {
     this.blockArray = [];
     this.chordsUsed = [new Chord()];
     console.log("chords used on initialization: " + this.chordsUsed[0].root + " " + this.chordsUsed[0].type);
-   
+    
+    //Adds block at end of array. Probably gonna delete this and just use insert
     this.addBlock = function(chord) {
        var newBlock = new Block(chord);
        this.blockArray.push(newBlock);
    };
    
+   //Inserts block at specific index
+   this.insertBlock = function(blockIndex, chord) {
+       var newBlock = new Block(chord);
+       this.blockArray.splice(blockIndex, 0, newBlock);
+   };
+   
+   //deletes a block at a specific index
    this.deleteBlock = function(blockIndex) {
        this.blockArray.splice(blockIndex, 1);
    };
    
+   //updates chords used array
    this.updateChordsUsed = function (blockIndex) {
        this.chordsUsed = [];
        for (j = 0; j < this.blockArray.length; j++) {
