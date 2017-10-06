@@ -116,9 +116,39 @@ var onBeatsChange = function () {
     $(this.parentNode).addClass("songBlock" + newBeatNum);
     console.log($(this.parentNode).attr('class'));
     
-    //TODO: Update current chord
+    //TODO: Fix this
     currentSong.blockArray[currentBlockIndex].duration = newBeatNum;
     //console.log("Duration of that block is now: " + currentSong.blockArray[currentBlockIndex].duration);
+};
+
+//Define listener for delete block buttons
+var deleteBlockDiv = function () {
+    console.log ("deleting a block, boss");
+    
+    //index of button CLICKED
+    var index = $(this.parentNode).index();
+    
+    //Delete block in song object
+    currentSong.deleteBlock(index);
+    
+    //Delete div
+    $("#songBlock" + index).remove();
+    
+    //Iterates through exisitng divs after this one and changes indices
+    for (i = (index+1); i < currentSong.blockArray.length + 1; i++) {
+        $('#songBlock' + i).prop("id", ("songBlock" + (i - 1)));
+        $('#chordDisplay' + i).prop("id", ("chordDisplay" + (i - 1)));
+        $('#notesDisplay' + i).prop("id", ("notesDisplay" + (i - 1)));
+        $('#lyricsDisplay' + i).prop("id", ("lyricsDisplay" + (i - 1)));
+        $('#rootSelect' + i).prop("id", ("rootSelect" + (i - 1)));
+        $('#chordSelect' + i).prop("id", ("chordSelect" + (i - 1)));
+        $('#lyricsBox' + i).prop("id", ("lyricsBox" + (i - 1)));
+        $('#beatsSelect' + i).prop("id", ("beatsSelect" + (i - 1)));
+        $('#btnAddBlock' + i).prop("id", ("btnAddBlock" + (i - 1)));
+        $('#btnDeleteBlock' + i).prop("id", ("btnDeleteBlock" + (i - 1)));
+    }
+    
+    updateChordsUsedView();
 };
 
 //Define listener for add block buttons
@@ -145,6 +175,7 @@ var addBlockDiv = function() {
         $('#lyricsBox' + i).prop("id", ("lyricsBox" + (i + 1)));
         $('#beatsSelect' + i).prop("id", ("beatsSelect" + (i + 1)));
         $('#btnAddBlock' + i).prop("id", ("btnAddBlock" + (i + 1)));
+        $('#btnDeleteBlock' + i).prop("id", ("btnDeleteBlock" + (i + 1)));
     }
     
     $("#songBlock" + index).after(
@@ -181,7 +212,8 @@ var addBlockDiv = function() {
                 <option value="3">3</option>\
                 <option value="4" selected="selected">4</option>\
             </select>\
-            <input type="button" id="btnAddBlock' + (index + 1) +'" class="btnAddBlock" onclick="addBlockDiv" value="Add Block">\n\
+            <input type="button" id="btnAddBlock' + (index + 1) +'" class="btnAddBlock" onclick="addBlockDiv" value="Add Block">\
+            <input type="button" id="btnDeleteBlock' + (index + 1) +'" class="btnDeleteBlock" onclick="deleteBlockDiv" value="Delete Block">\
         </div>');
     
     //Populate chord type select options
@@ -198,6 +230,7 @@ var addBlockDiv = function() {
     $('#chordSelect' + (index +1)).change(onChordChange);
     $('#beatsSelect' + (index +1)).change(onBeatsChange);
     $('#btnAddBlock' + (index +1)).click(addBlockDiv);
+    $('#btnDeleteBlock' + (index +1)).click(deleteBlockDiv);
     $('#lyricsBox' + (index +1)).on('input', onLyricsChange);
 
     //Initialize chord output
@@ -243,7 +276,8 @@ $(document).ready(function (){
                 <option value="3">3</option>\
                 <option value="4" selected="selected">4</option>\
             </select>\
-            <input type="button" id="btnAddBlock0" class="btnAddBlock" onclick="addBlockDiv" value="Add Block">\n\
+            <input type="button" id="btnAddBlock0" class="btnAddBlock" onclick="addBlockDiv" value="Add Block">\
+            <input type="button" id="btnDeleteBlock0" class="btnDeleteBlock" onclick="deleteBlockDiv" value="Delete Block">\
         </div>');
     //Populate chord type select options
     for (i = 0; i < chordList.length; i++){
@@ -258,6 +292,7 @@ $(document).ready(function (){
     $('#chordSelect0').change(onChordChange);
     $('#beatsSelect0').change(onBeatsChange);
     $('#btnAddBlock0').click(addBlockDiv);
+    $('#btnDeleteBlock0').click(deleteBlockDiv);
     $('#lyricsBox0').on('input', onLyricsChange);
 
     //Add block to song object
